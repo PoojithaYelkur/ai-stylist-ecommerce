@@ -11,25 +11,30 @@ function Login() {
   const login = async () => {
     try {
       const res = await API.post("/users/login", {
-        email: email,
-        password: password,
+        email,
+        password,
       });
 
       console.log("LOGIN RESPONSE:", res.data);
 
-      // ✅ store token only if exists
-      if (res.data && res.data.token) {
+      // ✅ check token exists
+      if (res.data?.token) {
         localStorage.setItem("token", res.data.token);
+
+        alert("Login success");
+
+        navigate("/products");
+      } else {
+        alert("Token not received");
       }
 
-      alert("Login success");
-
-      // ✅ redirect after success
-      navigate("/products");
-
     } catch (err) {
-      console.log("LOGIN ERROR:", err);
-      alert("Login failed");
+      console.log("LOGIN ERROR:", err.response?.data || err.message);
+
+      alert(
+        err.response?.data?.message ||
+        "Login failed"
+      );
     }
   };
 
