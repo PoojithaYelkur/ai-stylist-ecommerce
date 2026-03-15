@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import userRoutes from "./routes/userRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import connectDB from "./config/db.js";
+import tryOnRoutes from "./routes/tryOnRoutes.js";
 
 dotenv.config();
 
@@ -19,7 +20,7 @@ app.use(express.json());
 // routes
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
-
+app.use("/api/tryon", tryOnRoutes);
 // test route
 app.get("/", (req, res) => {
   res.send("Backend running");

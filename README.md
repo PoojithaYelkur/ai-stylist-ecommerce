@@ -8,3 +8,13 @@ Tech stack:
 - MongoDB
 - MediaPipe
 - Gemini API
+
+AI Virtual Try-On feature using image overlay , Ecommerce Web App
+
+Features:
+- User Authentication (JWT)
+- Product API (MongoDB)
+- AI Virtual Try-On feature
+- Upload image try-on simulation
+- MERN stack
+- REST API

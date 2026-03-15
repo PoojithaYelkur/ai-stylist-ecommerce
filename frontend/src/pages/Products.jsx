@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import API from "../api";
+import { useNavigate } from "react-router-dom";
 
 function Products() {
   const [products, setProducts] = useState([]);
-
+  
   useEffect(() => {
     loadProducts();
   }, []);
@@ -17,6 +18,8 @@ function Products() {
       console.log("ERROR:", err);
     }
   };
+  const navigate = useNavigate();
+
 
   return (
     <div>
@@ -30,7 +33,11 @@ function Products() {
           <p>{p.price}</p>
           <p>{p.category}</p>
           <p>{p.gender}</p>
+            <button onClick={() => navigate("/tryme")}>
+              Try Me 
+            </button>
         </div>
+        
       ))}
     </div>
   );
