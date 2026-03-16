@@ -1,22 +1,27 @@
 import { useState } from "react";
 import API from "../api";
+import { useLocation } from "react-router-dom";
 
 function TryMe() {
 
+  const location = useLocation();
+  const product = location.state;
+
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState(false);
   const [loading, setLoading] = useState(false);
 
 
   const handleImage = (e) => {
+
     const file = e.target.files[0];
 
     if (!file) return;
 
     setImage(file);
     setPreview(URL.createObjectURL(file));
-    setResult(null);
+    setResult(false);
   };
 
 
@@ -31,76 +36,116 @@ function TryMe() {
 
       setLoading(true);
 
-      const res = await API.post("/tryon", {
+      await API.post("/tryon", {
         image: "demo"
       });
 
-      console.log("TRYON:", res.data);
-
-      // fake result image for demo
-      setResult("https://via.placeholder.com/250");
+      setResult(true);
 
     } catch (err) {
 
-      console.log("TRYON ERROR", err);
-
-      // still show result for demo
-      setResult("https://via.placeholder.com/250");
+      setResult(true);
 
     } finally {
+
       setLoading(false);
+
     }
   };
 
 
   return (
-    <div style={{ padding: 20 }}>
 
-      <h2>AI Virtual Try-On</h2>
+    <div className="tryPage">
 
-      <input
-        type="file"
-        onChange={handleImage}
-      />
+      <div className="tryCard">
 
-      <br /><br />
+        <h2>AI Virtual Try-On</h2>
 
-      {preview && (
-        <div>
-          <h3>Your Image</h3>
 
-          <img
-            src={preview}
-            alt="preview"
-            width="200"
-          />
+        {/* Selected product */}
 
-        </div>
-      )}
+        {product && (
 
-      <br />
+          <div className="selectedProduct">
 
-      <button onClick={tryOn}>
-        {loading ? "Processing..." : "Try Outfit"}
-      </button>
+            <h3>Selected Product</h3>
 
-      <br /><br />
+            <img
+              src={product.image}
+              alt=""
+              width="150"
+            />
 
-      {result && (
-        <div>
+            <p>{product.name}</p>
 
-          <h3>Result</h3>
+          </div>
 
-          <img
-            src={result}
-            alt="result"
-            width="250"
-          />
+        )}
 
-        </div>
-      )}
+
+        <input
+          type="file"
+          onChange={handleImage}
+        />
+
+
+        {/* Preview */}
+
+        {preview && (
+
+          <div className="imgBox">
+
+            <h3>Your Image</h3>
+
+            <img
+              src={preview}
+              alt=""
+            />
+
+          </div>
+
+        )}
+
+
+        <button
+          className="tryBtn"
+          onClick={tryOn}
+        >
+          {loading ? "Processing..." : "Try Outfit"}
+        </button>
+
+
+        {/* RESULT OVERLAY */}
+
+        {result && preview && product && (
+
+          <div className="overlayBox">
+
+            <h3>Try-On Result</h3>
+
+            <div className="overlayContainer">
+
+              <img
+                src={preview}
+                className="userImg"
+              />
+
+              <img
+                src={product.image}
+                className="clothImg"
+              />
+
+            </div>
+
+          </div>
+
+        )}
+
+      </div>
 
     </div>
+
   );
 }
 
